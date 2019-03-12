@@ -1,0 +1,43 @@
+group 'StepListenerTest'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.qameta.allure:allure-gradle:2.5"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'io.qameta.allure'
+
+sourceCompatibility = 1.8
+
+allure {
+    autoconfigure = true
+    aspectjweaver = true
+    version = '2.7.0'
+    resultsDir = file("${projectDir}/build/allure/results")
+    reportDir = file("${projectDir}/build/allure/report")
+}
+
+configurations {
+    agent
+}
+
+task "test-functional"(type: Test) {
+    group 'test'
+
+    useTestNG(){
+    }
+}
+
+dependencies {
+    def testngVersion = '7.0.0-beta1'
+
+    agent "org.aspectj:aspectjweaver:1.8.10"
+    compile group: 'io.qameta.allure', name: 'allure-testng', version: '2.7.0'
+    compile group: 'org.testng', name: 'testng', version: testngVersion
+}
